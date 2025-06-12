@@ -211,7 +211,8 @@ Python属于解释型语言，当程序运行时，是一行一行的解释，�
 #### 2.简述解释型和编译型编程语言？
 
 ```markdown
-解释型：就是边解释边执行（Python，php），代码在执行过程中由解释器读取一行或者多行代码，并将其编译为字节码，python虚拟机会解释这些字节码，并进行执行。
+解释型：就是边解释边执行（Python，php），代码在执行过程中由解释器读取一行或者多行代码，并将其编译为字节码
+    ，python虚拟机会解释这些字节码，并进行执行。
 
 编译型：编译后再执行（c、java、c#），编译器会将所有的代码编译打包为可执行文件，如exe文件。然后再执行
 ```
@@ -226,9 +227,11 @@ CPython是使用最广的Python解释器。教程的所有代码也都在CPython
 
 IPython
 IPython是基于CPython之上的一个交互式解释器，也就是说，IPython只是在交互方式上有所增强，但是执行Python代码的功能和CPython是完全一样的。CPython用>>>作为提示符，而IPython用In [序号]:作为提示符。
+比如使用jupyter notebook时，一般使用IPython解释器
+
 PyPy
 
-由Python写的解释器，它的执行速度是最快。PyPy采用JIT技术，对Python代码进行动态编译（注意不是解释），
+由Python写的解释器，它的执行速度是最快。PyPy采用JIT技术（即时编译），对Python代码进行动态编译（注意不是解释），
 绝大部分Python代码都可以在PyPy下运行，但是PyPy和CPython有一些是不同的，这就导致相同的Python代码在两种解释器下执行可能会有不同的结果。
 
 Jython
@@ -296,11 +299,17 @@ py3：range  统一使用range，Python3中range的机制也进行修改并提�
 12：字典变量的has_key函数被Python废弃，统一使用in关键词
 
 13：file函数被Python3废弃，统一使用open来处理文件，可以通过io.IOBase检查文件类型
+
+14：Python 2: 当两个整数相除时，结果会被截断为整数（地板除）。例如：5 / 2 的结果是 2。
+    Python 3: 整数相除会得到一个浮点数，结果是精确的除法结果。例如：5 / 2 的结果是 2.5。如果需要地板除，可以使用 // 运算符，例如 5 // 2 结果是 2。
 ```
 
 #### 5.Python3 和 Python2 中 int 和 long 的区别？
 
 ```markdown
+在python2里，整数分为int和long，对于int的长度通常与操作系统的位数有关，在32位操作系统int是32位，在64位操作系统，int就是64位。（跨平台或者跨操作系统不便）。
+  long型是一种任意精度的类型，只有计算机内存允许，可以无限大。当给int变量赋值超过int范围时，会自动转为long型，后面会加上字母L
+
 在python3里，只有一种整数类型int,大多数情况下，和python２中的长整型类似。
 ```
 
@@ -327,35 +336,114 @@ https://www.python.org/dev/peps/pep-0008/
 ```
 
 #### 8.了解 Python 之禅吗？
+```
+总结来说，“Python之禅”强调了：
 
-```markdown
+- 代码的可读性和简洁性： 鼓励编写清晰、易于理解的代码。
+- 一致性和明确性： 避免模糊不清的表达，保持风格统一。
+- 实用主义： 在理论 purity 和实际 applicability 之间找到平衡。
+- 错误处理： 不要忽视错误，要妥善处理。
+- 避免过度设计： 优先选择简单直接的方法。
+```
+```python
 import this
+
+The Zen of Python, by Tim Peters
+
+Beautiful is better than ugly.
+# 美观胜于丑陋。代码不仅要能工作，还要看起来优雅。
+
+Explicit is better than implicit.
+# 显式优于隐式。代码应该明确表达其意图，避免隐藏的规则或行为。
+
+Simple is better than complex.
+# 简单优于复杂。尽量用最简单直接的方式解决问题。
+
+Complex is better than complicated.
+# 复杂优于复杂难懂。如果问题本身复杂，那就坦然面对，但要避免不必要的复杂化。
+
+Flat is better than nested.
+# 扁平优于嵌套。尽量减少代码的嵌套层级，使结构更清晰。
+
+Sparse is better than dense.
+# 间隔优于拥挤。代码应该有适当的空格和换行，提高可读性。
+
+Readability counts.
+# 可读性很重要。代码是给人看的，其次才是给计算机执行的。
+
+Special cases aren't special enough to break the rules.
+# 特殊情况不足以违反规则。不要为了所谓的“特殊情况”而破坏整体设计原则，除非有非常充分的理由。
+
+Although practicality beats purity.
+# 尽管实用性胜过纯粹性。在纯粹的理论和实际应用之间找到平衡，有时为了解决实际问题可以适当妥协。
+
+Errors should never pass silently.
+# 错误不应该静默地通过。错误和异常应该被明确处理或报告。
+
+Unless explicitly silenced.
+# 除非被明确地静默。可以通过特定的机制（如 try-except）来捕获和处理异常，但这应该是故意的。
+
+In the face of ambiguity, refuse the temptation to guess.
+# 面对模棱两可的情况，拒绝猜测的诱惑。代码应该明确，避免歧义，不要依赖开发者的猜测。
+
+There should be one-- and preferably only one --obvious way to do it.
+# 事情应该有一种——最好只有一种——明显的做法。Python 致力于提供清晰、一致的语言特性，避免多种等价但风格迥异的方法。
+
+Although that way may not be obvious at first unless you're Dutch.
+# 虽然那种方法起初可能不明显（除非你是荷兰人 :-））。这是一个幽默的脚注，暗示 Guido van Rossum（荷兰人）有时能一眼看出最佳方案。
+
+Now is better than never.
+# 现在做事胜过永远不做。不要因为追求完美而迟迟不动手，先完成再迭代优化。
+
+Although never is often better than *right* now.
+# 尽管永远不做也比立刻做错要好。如果当前方案明显不合适或会导致大问题，不如暂缓。
+
+If the implementation is hard to explain, it's a bad idea.
+# 如果实现难以解释，那通常是个坏主意。好的代码应该是清晰易懂的。
+
+If the implementation is easy to explain, it may be a good idea.
+# 如果实现容易解释，那可能是个好主意。简洁明了往往意味着设计良好。
+
+Namespaces are one honking great idea -- let's do more of those!
+# 命名空间是个绝妙的想法——让我们多用用吧！命名空间有助于避免名字冲突，是组织代码的重要工具。
+
 ```
 
 #### 9.了解 docstring 吗？
 
 ```markdown
-Python有一个很奇妙的特性，称为 文档字符串 ，它通常被简称为 docstrings 。DocStrings是一个重要的工具，由于它帮助你的程序文档更加简单易懂，你应该尽量使用它。你甚至可以在程序运行的时候，从函数恢复文档字符串。
-使用魔法方法'__doc__'可以打印docstring的内容
+Docstring 是 Python 中一种特殊的字符串，它出现在函数、方法、类或模块的开头，用于记录其用途、功能、参数、返回值、作者、示例等信息。它不是注释（虽然它的内容与注释类似），而是代码的一部分，并且可以通过 Python 的内置函数 help() 或对象的 .__doc__ 属性来访问。
+优点：
+- 增强代码的可读性和易理解，增加可维护性
+- 使用IDE时，调用函数、类会自动提示函数的使用方式，包括参数返回值等信息，提升开发效率
+- 使用pydoc等工具可以自动生成代码文档
 ```
 
 #### 10.了解类型注解吗？
 
 ```markdown
 def add(x:int, y:int) -> int:
+    year:int = 2025
     return x + y
-用 : 类型 的形式指定函数的参数类型，用 -> 类型 的形式指定函数的返回值类型
+用 : 类型 的形式指定函数的参数类型，用 -> 类型 的形式指定函数的返回值类型。例如：
+- List[T] / list[T]: 表示元素类型为 T 的列表。T 可以是任何类型，如 List[int] 或 list[str]。
+- Dict[K, V] / dict[K, V]: 表示键类型为 K、值类型为 V 的字典。如 Dict[str, int] 或 dict[str, float]。
+- Tuple[T1, T2, ...] / tuple[T1, T2, ...]: 表示具有特定类型元素的元组。如 Tuple[int, str] 或 tuple[str, ...]（表示第一个元素是 str，后面可以有任意数量的 str 元素）。
+补充：类型注解本身不会改变 Python 的动态特性。你可以仍然给一个 age: int 变量赋一个字符串值，Python 运行时不会阻止你。
 ```
 
 #### 11.例举你知道 Python 对象的命名规范，例如方法或者类等。
 
 ```
-类名都使用首字母大写开头(Pascal命名风格)的规范；
-全局变量全用大写字母，单词之间用 _分割；
-普通变量用小写字母，单词之间用 _分割；
-普通函数和普通变量一样；
-私有函数以 __ 开头（2个下划线），其他和普通函数一样；
-
+- 包名：同样使用短小、全小写的名称。避免使用下划线，因为一些包管理系统可能不支持带下划线的包名。
+- 模块名：使用短小、全小写的名称。可以包含下划线 _ 来提高可读性，但通常建议保持简短。
+- 类名都使用首字母大写开头(Pascal命名风格)的规范；
+- 全局变量全用大写字母，单词之间用 _分割；
+- 普通变量用小写字母，单词之间用 _分割；
+- 普通函数和普通变量一样；
+- 私有函数以 __ 开头（2个下划线），其他和普通函数一样；
+- 实例变量/属性 (Instance Attributes):通常使用小写字母和下划线 _。如果希望表示一个受保护的（protected）属性（即不建议外部直接访问，但可以通过继承访问），
+    可以在名称前加一个下划线 _。示例: self.name, self._age
 ```
 
 #### 12.Python 中的注释有几种？
