@@ -185,7 +185,7 @@ Table of Contents
             * [159.简述 threading.local 的作用。](#159简述-threadinglocal-的作用)
          * [<strong>Git 面试题</strong>](#git-面试题)
             * [160.说说你知道的 git 命令。](#160说说你知道的-git-命令)
-            * [161.git 如何查看某次提交修改的内容？](#161git-如何查看某次提交修改的内容)
+            
 
 
 
