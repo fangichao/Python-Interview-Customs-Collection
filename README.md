@@ -506,6 +506,39 @@ pylint,black,pycharm也带有pep8的代码规范工具
 ## **三.数据类型**
 
 ### **字符串**
+| 函数/操作                 | 描述                                                         | 示例                                                                 |
+|---------------------------|--------------------------------------------------------------|----------------------------------------------------------------------|
+| `str()`                   | 创建字符串，或将其他类型转换为字符串                         | `str(123)` -> `"123"`                                               |
+| `len(s)`                  | 返回字符串的长度                                             | `len("hello")` -> `5`                                               |
+| `s[index]`                | 通过索引访问单个字符（索引从0开始）                         | `"hello"[1]` -> `"e"`                                               |
+| `s[start:end:step]`       | 切片操作，获取子字符串                                       | `"hello"[1:4]` -> `"ell"`, `"hello"[::-1]` -> `"olleh"`              |
+| `s + t`                   | 字符串连接                                                   | `"hello" + " world"` -> `"hello world"`                             |
+| `s * n`                   | 字符串重复n次                                               | `"ha" * 3` -> `"hahaha"`                                            |
+| `in`, `not in`            | 成员运算符，检查子字符串是否存在                             | `"ell" in "hello"` -> `True`, `"x" not in "abc"` -> `True`          |
+| `s.find(sub)`             | 查找子字符串 `sub` 第一次出现的位置，未找到返回 `-1`         | `"hello".find("ell")` -> `2`                                        |
+| `s.index(sub)`            | 查找子字符串 `sub` 第一次出现的位置，未找到抛出异常          | `"hello".index("e")` -> `1`                                        |
+| `s.count(sub)`            | 统计子字符串 `sub` 出现的次数                               | `"banana".count("a")` -> `3`                                       |
+| `s.upper()`               | 转换为大写                                                   | `"hello".upper()` -> `"HELLO"`                                      |
+| `s.lower()`               | 转换为小写                                                   | `"HELLO".lower()` -> `"hello"`                                      |
+| `s.capitalize()`          | 将字符串的第一个字符转换为大写，其余为小写                   | `"hello world".capitalize()` -> `"Hello world"`                     |
+| `s.title()`               | 将字符串中每个单词的首字母大写                               | `"hello world".title()` -> `"Hello World"`                          |
+| `s.strip()`               | 去除字符串首尾的空白字符（空格、制表符、换行符等）           | `"  hello  ".strip()` -> `"hello"`                                  |
+| `s.lstrip()`, `s.rstrip()`| 去除字符串左侧或右侧的空白字符                               | `"  hello".lstrip()` -> `"hello"`, `"hello  ".rstrip()` -> `"hello"` |
+| `s.replace(old, new)`     | 将字符串中的 `old` 子字符串替换为 `new`                       | `"hello".replace("ll", "p")` -> `"hepo"`                            |
+| `s.split(sep=None)`       | 按分隔符 `sep` 分割字符串，返回列表                          | `"a,b,c".split(",")` -> `["a", "b", "c"]`                           |
+| `s.join(iterable)`        | 以字符串 `s` 作为分隔符，连接可迭代对象 `iterable` 中的元素   | `",".join(["a", "b", "c"])` -> `"a,b,c"`                            |
+| `s.startswith(prefix)`    | 检查字符串是否以 `prefix` 开头                               | `"hello".startswith("he")` -> `True`                                |
+| `s.endswith(suffix)`      | 检查字符串是否以 `suffix` 结尾                               | `"hello".endswith("lo")` -> `True`                                  |
+| `s.isdigit()`             | 检查字符串是否只包含数字字符                                 | `"123".isdigit()` -> `True`                                         |
+| `s.isalpha()`             | 检查字符串是否只包含字母字符                                 | `"abc".isalpha()` -> `True`                                         |
+| `s.isalnum()`             | 检查字符串是否只包含字母和数字字符                           | `"a1b2".isalnum()` -> `True`                                        |
+| `s.isspace()`             | 检查字符串是否只包含空白字符                                 | `"   ".isspace()` -> `True`                                         |
+| `s.islower()`, `s.isupper()` | 检查字符串是否全是小写/大写字母                             | `"abc".islower()` -> `True`, `"ABC".isupper()` -> `True`            |
+| `f"..."` 或 `f'...'`      | f-string（格式化字符串字面值），在字符串中嵌入表达式         | `name = "Alice"; f"Hello, {name}!"` -> `"Hello, Alice!"`            |
+| `"{0} {1}".format(a, b)`  | 使用 `str.format()` 方法格式化字符串                         | `"{} {}".format("hello", "world")` -> `"hello world"`               |
+| `s.encode(encoding)`      | 将字符串编码为字节串（bytes）                                | `"hello".encode('utf-8')` -> `b'hello'`                             |
+| `s.decode(encoding)`      | （bytes对象的方法）将字节串解码为字符串                      | `b'hello'.decode('utf-8')` -> `"hello"`                             |
+
 
 #### 19.列举 Python 中的基本数据类型。
 
@@ -639,6 +672,29 @@ s = ' '.join(a.strip().split())
 
 
 ### **列表**
+| 函数/操作               | 描述                                       | 示例                                 |
+|------------------------|------------------------------------------|------------------------------------|
+| `list()`               | 创建一个空列表                               | `mylist = list()`                  |
+| `list(iterable)`       | 使用可迭代对象创建列表                         | `mylist = list([1, 2, 3])`         |
+| `len(list)`            | 返回列表的长度                               | `length = len(mylist)`             |
+| `list[index]`          | 访问或设置列表中的元素                         | `value = mylist[0]`<br>`mylist[1] = 4` |
+| `list.append(item)`    | 在列表末尾添加一个元素                         | `mylist.append(4)`                  |
+| `list.insert(index, item)` | 在指定位置插入一个元素                     | `mylist.insert(1, 'a')`            |
+| `list.extend(iterable)`| 将可迭代对象的元素扩展到列表末尾                 | `mylist.extend([4, 5, 6])`         |
+| `list.remove(item)`    | 删除列表中的第一个匹配项                       | `mylist.remove(2)`                  |
+| `list.pop([index])`   | 删除并返回指定位置的元素，默认为最后一个元素       | `last_item = mylist.pop()`<br>`item = mylist.pop(1)` |
+| `list.clear()`         | 清空列表                                   | `mylist.clear()`                    |
+| `list.index(item)`     | 返回列表中第一个匹配项的索引                     | `index = mylist.index('a')`        |
+| `list.count(item)`     | 返回列表中元素出现的次数                       | `count = mylist.count(2)`          |
+| `list.sort()`          | 对列表进行原地排序                             | `mylist.sort()`                     |
+| `list.reverse()`       | 反转列表中的元素顺序                           | `mylist.reverse()`                  |
+| `list.copy()`          | 返回列表的浅拷贝                             | `newlist = mylist.copy()`          |
+| `list slicing`         | 获取列表的子集                               | `sublist = mylist[1:3]`            |
+| `list comprehension`   | 创建列表的简洁方式                             | `squares = [x**2 for x in range(10)]` |
+| `list.join()`          | 将列表中的元素连接成字符串（字符串方法，适用于字符串列表） | `''.join(['a', 'b', 'c'])` -> 'abc' |
+| `list in`              | 检查元素是否在列表中                           | `if 2 in mylist:`                   |
+| `list + list`          | 连接两个列表                                 | `newlist = mylist + [4, 5, 6]`     |
+| `list * n`             | 重复列表n次                                 | `repeatedlist = mylist * 3`        |
 
 #### 32.已知 AList = [1,2,3,1,2]，对 AList 列表元素去重，写出具体过程。
 
@@ -716,42 +772,30 @@ random.shuffle(a)
 
 
 ### **字典**
+| 函数/操作             | 描述                                       | 示例                                      |
+|----------------------|------------------------------------------|-----------------------------------------|
+| `dict()`             | 创建一个空字典                             | `my_dict = dict()`                      |
+| `dict(key=value)`    | 使用键值对创建字典                         | `my_dict = dict(name='Alice', age=25)`  |
+| `dict(iterable)`     | 使用可迭代对象创建字典                     | `my_dict = dict([('name', 'Alice'), ('age', 25)])` |
+| `dict(**kwargs)`     | 使用关键字参数创建字典                     | `my_dict = dict(name='Alice', age=25)`  |
+| `len(dict)`          | 返回字典中的项目数量                       | `length = len(my_dict)`                 |
+| `dict[key]`          | 访问或设置字典中的项                       | `value = my_dict['name']`<br>`my_dict['age'] = 26` |
+| `dict.get(key, default)` | 获取字典中的项，如果不存在则返回默认值     | `value = my_dict.get('name', 'Unknown')` |
+| `dict.setdefault(key, default)` | 如果键不存在，则设置键值对               | `my_dict.setdefault('city', 'New York')` |
+| `dict.update(other)` | 使用另一个字典或键值对更新字典             | `my_dict.update({'age': 26, 'city': 'Paris'})` |
+| `key in dict`        | 检查字典中是否存在键                       | `if 'name' in my_dict:`                |
+| `key not in dict`    | 检查字典中是否不存在键                     | `if 'city' not in my_dict:`            |
+| `dict.keys()`        | 返回一个包含字典所有键的视图               | `keys = my_dict.keys()`                |
+| `dict.values()`      | 返回一个包含字典所有值的视图               | `values = my_dict.values()`            |
+| `dict.items()`       | 返回一个包含字典所有键值对的视图           | `items = my_dict.items()`              |
+| `dict.pop(key, default)` | 删除指定的键并返回其值，如果不存在则返回默认值 | `value = my_dict.pop('name', 'Unknown')` |
+| `dict.popitem()`     | 删除并返回字典中的最后一对键值对           | `key, value = my_dict.popitem()`       |
+| `del dict[key]`      | 删除字典中的键值对                         | `del my_dict['name']`                  |
+| `dict.clear()`       | 清空字典                                   | `my_dict.clear()`                      |
+| `dict.copy()`        | 返回字典的浅拷贝                           | `new_dict = my_dict.copy()`            |
+| `dict.fromkeys(iterable, value)` | 创建一个新字典，以可迭代对象为键，值为指定值 | `new_dict = dict.fromkeys(['a', 'b'], 1)` |
 
 
-# Python 字典常用函数和操作
-
-## 1. 添加和修改元素
-- `dict[key] = value`：如果键 `key` 不存在，则添加这个键值对；如果键 `key` 已存在，则更新其对应的值为 `value`。
-
-## 2. 获取元素
-- `dict[key]`：根据键获取对应的值。如果键不存在，会抛出 `KeyError` 异常。
-- `dict.get(key, default=None)`：根据键获取对应的值。如果键不存在，不会抛出异常，而是返回指定的默认值（`default` 参数，默认为 `None`）。
-- `dict.setdefault(key, default=None)`：如果键存在，返回其对应的值；如果键不存在，则插入这个键值对（值为 `default`），并返回 `default`。
-
-## 3. 删除元素
-- `del dict[key]`：删除指定键的键值对。如果键不存在，会抛出 `KeyError` 异常。
-- `dict.pop(key, default)`：删除指定键的键值对，并返回其对应的值。如果键不存在，且提供了 `default` 参数，则返回 `default`；如果没有提供 `default` 参数，则抛出 `KeyError` 异常。
-
-## 4. 检查键是否存在
-- `key in dict`：检查字典中是否存在键 `key`，返回 `True` 或 `False`。
-- `key not in dict`：检查字典中是否不存在键 `key`，返回 `True` 或 `False`。
-
-## 5. 字典视图
-- `dict.keys()`：返回一个动态视图对象，包含字典中的所有键。视图对象会随着字典的变化而变化。
-- `dict.values()`：返回一个动态视图对象，包含字典中的所有值。
-- `dict.items()`：返回一个动态视图对象，包含字典中的所有键值对（以 `(key, value)` 元组的形式）。
-
-## 6. 更新字典
-- `dict.update(other_dict)`：使用来自另一个字典 `other_dict` 的键值对来更新当前字典。如果键冲突，`other_dict` 中的值会覆盖当前字典中的值。也可以接受键值对元组列表等。
-
-## 7. 复制字典
-- `dict.copy()`：返回字典的一个浅拷贝。
-
-## 8. 其他常用操作
-- `len(dict)`：返回字典中键值对的数量。
-- 遍历：可以直接遍历字典的键、值或键值对。例如：
-
-```
 
 #### 38.字典操作中 del 和 pop 有什么区别？
 
@@ -812,8 +856,94 @@ c = dict(z)
 #### 43.Python 常用的数据结构的类型及其特性？
 
 ```markdown
-List,tuple,dict,set是比较常用的数据结构，queue,heap,deque,ProrityQueue，multiprocessing.Queue等进阶的数据结构类型。特性就去查查吧，写在这里太长了。
+List,tuple,dict,set是比较常用的数据结构，queue,heap,deque,ProrityQueue，multiprocessing.Queue等进阶的数据结构类型。
 ```
+Python 提供了多种数据结构，用于存储和组织数据。这些结构各有特点，适用于不同的场景。
+
+##### 43.1. 列表 (List)
+- **介绍**：列表是有序的、可变的集合，可以包含重复元素。
+- **特点**：
+  - 有序：元素有固定顺序。
+  - 可变：可以修改、添加和删除元素。
+  - 动态：大小可变。
+- **用途**：通用数据存储，适合需要频繁修改的数据集。
+
+##### 43.2. 元组 (Tuple)
+- **介绍**：元组是有序的、不可变的集合，可以包含重复元素。
+- **特点**：
+  - 有序：元素有固定顺序。
+  - 不可变：一旦创建，不能修改。
+  - 动态：大小固定。
+- **用途**：存储不可变数据，如函数返回多个值。
+
+##### 43.3. 字典 (Dict)
+- **介绍**：字典是无序的、可变的键值对集合，键唯一。
+- **特点**：
+  - 无序：元素没有固定顺序。
+  - 可变：可以修改、添加和删除键值对。
+  - 键唯一：每个键只能对应一个值。
+- **用途**：快速查找和存储键值对。
+
+##### 43.4. 集合 (Set)
+- **介绍**：集合是无序的、可变的唯一元素集合。
+- **特点**：
+  - 无序：元素没有固定顺序。
+  - 可变：可以添加和删除元素。
+  - 唯一：不包含重复元素。
+- **用途**：成员资格测试、消除重复元素、集合运算。
+
+
+##### 43.5. 队列 (Queue)
+- **介绍**：队列是先进先出（FIFO）的数据结构。
+- **特点**：
+  - FIFO：第一个添加的元素第一个被移除。
+  - 线程安全：适用于多线程环境。
+- **用途**：任务排队、缓存。
+
+##### 43.6. 堆 (Heap)
+- **介绍**：堆是一种基于优先级的二叉树结构。
+- **特点**：
+  - 最小堆或最大堆：最小堆的父节点总是小于或等于其子节点，最大堆相反。
+  - 动态：可以添加和删除元素。
+- **用途**：实现优先队列、排序算法。
+
+##### 43.7. 双端队列 (Deque)
+- **介绍**：双端队列是两端都可以进行添加和删除操作的队列。
+- **特点**：
+  - 双向：可以在两端添加和删除元素。
+  - 高效：两端操作时间复杂度为O(1)。
+- **用途**：需要两端操作的场景，如滑动窗口。
+
+##### 43.8. 优先队列 (PriorityQueue)
+- **介绍**：优先队列是一种基于优先级的队列。
+- **特点**：
+  - 优先级：元素按照优先级排序。
+  - 线程安全：适用于多线程环境。
+- **用途**：任务调度、事件驱动编程。
+
+##### 43.9. 多进程队列 (multiprocessing.Queue)
+- **介绍**：多进程队列是用于进程间通信的队列。
+- **特点**：
+  - 进程安全：适用于多进程环境。
+  - 通信机制：进程间可以通过队列传递数据。
+- **用途**：多进程编程中的数据共享。
+
+##### 43.10.数据结构对比
+
+| 数据结构         | 有序 | 可变 | 唯一 | 键值对 | 线程安全 | 进程安全 | 主要用途                         |
+|------------------|------|------|------|--------|----------|----------|----------------------------------|
+| List             | 是   | 是   | 否   | 否     | 否       | 否       | 通用数据存储                     |
+| Tuple            | 是   | 否   | 否   | 否     | 否       | 否       | 存储不可变数据                   |
+| Dict             | 否   | 是   | 键唯一 | 是     | 否       | 否       | 快速查找和存储键值对             |
+| Set              | 否   | 是   | 是   | 否     | 否       | 否       | 成员资格测试、消除重复元素       |
+| Queue            | 是   | 是   | 否   | 否     | 是       | 否       | 任务排队、缓存                   |
+| Heap             | 否   | 是   | 否   | 否     | 否       | 否       | 实现优先队列、排序算法           |
+| Deque            | 是   | 是   | 否   | 否     | 否       | 否       | 需要两端操作的场景，如滑动窗口   |
+| PriorityQueue    | 是   | 是   | 否   | 否     | 是       | 否       | 任务调度、事件驱动编程           |
+| multiprocessing.Queue | 否 | 是   | 否   | 否     | 是       | 是       | 多进程编程中的数据共享           |
+
+每种数据结构都有其独特的优势和适用场景，选择合适的数据结构可以大大提高程序的性能和可读性。
+
 
 #### 44.如何将 元组("A","B") 和 元组(1,2) 合并成 字典{"A":1,"B":2}？
 
@@ -864,6 +994,11 @@ a[2] = 2
 a = (1,2,3,[4,5,6,7],8)
 a[5] = 2
 报错，元组是不可变对象，下标越界
+
+# 下述方式不会报错，输出(1, 2, 3, [4, 5, 6, 7, 77], 8)
+a = (1,2,3,[4,5,6,7],8)
+a[3].append(77)
+print(a)
 ```
 
 ### **操作类题目**
@@ -908,13 +1043,26 @@ with open('C.txt','w') as f:
 #### 56.如果当前的日期为 20190530，要求写一个函数输出 N 天后的日期（比如 N 为 2，则输出 20190601)。
 
 ```python
-import datetime
-def getday(n):
-    y,m,d = 2019,5,30
-    the_date = datetime.datetime(y,m,d)
-    result_date = the_date + datetime.timedelta(days=n)
-    target_date = result_date.strftime('%Y%m%d')
-    return target_date
+from datetime import datetime, timedelta
+
+def get_date_after_n_days(current_date_str, n):
+    # 将输入的字符串转换为日期对象
+    current_date = datetime.strptime(current_date_str, "%Y%m%d").date()
+    
+    # 计算N天后的日期
+    future_date = current_date + timedelta(days=n)
+    
+    # 将日期对象格式化为字符串
+    future_date_str = future_date.strftime("%Y%m%d")
+    
+    return future_date_str
+
+# 示例使用
+current_date = "20190530"
+n = 2
+result = get_date_after_n_days(current_date, n)
+print(result)  # 输出: 20190601
+
 ```
 
 #### 57.写一个函数，接收整数参数 n，返回一个函数。函数的功能是把函数的参数和 n 相乘并把结果返回。
@@ -929,28 +1077,51 @@ def mul(n):
 ```
 
 #### 58.下面的代码会存在什么问题，如何改进？
-
+1、使用内置函数str作为变量名
 ```Python
 def strappend(num):
     str='first'
     for i in range(num):
         str+=str(i)
     return str
-  # 将str(i)改为str[i]
 ```
 
 #### 59.一行代码输出 1-100 之间的所有偶数。
 
 ```python
 [x for x in range(101) if x %2 ==0]
+[i for i in range(1, 100, 2)
 ```
 
 #### 60.with 语句的作用，并用它写一段代码。
-
+with 语句是 Python 提供的一种上下文管理协议 (Context Manager Protocol) 的语法糖，它的主要目的是简化资源管理，特别是在处理需要初始化和清理操作的对象时，比如文件、网络连接、锁等。
 ```python
 # with语句用来管理资源，及时关闭文件等操作，避免资源的泄漏
 with open('a.txt','r') as f:
     f.read()
+
+class MyResource:
+    def __init__(self, name):
+        self.name = name
+
+    def __enter__(self):
+        print(f"Initializing {self.name} resource...")
+        # 这里可以执行初始化操作，比如连接数据库
+        return self # 通常返回 self 或其他需要管理的对象
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(f"Cleaning up {self.name} resource...")
+        # 这里执行清理操作，比如断开数据库连接
+        # 如果需要抑制异常，可以返回 True
+        return False # 默认不抑制异常
+
+# 使用自定义的上下文管理器
+with MyResource("Database") as resource:
+    print(f"Doing work with {resource.name}...")
+    # 模拟可能发生的异常
+    # raise ValueError("Something went wrong!")
+# 无论是否发生异常，"Cleaning up Database resource..." 都会打印
+
 ```
 
 #### 61.Python 字典和 json 字符串相互转化方法。
