@@ -1145,18 +1145,24 @@ with open('a.txt','r') as f:
 ### **高级特性**
 
 #### 63.函数装饰器有什么作用？请列举说明。
-
+函数装饰器可以在不修改原函数的条件下，为原函数添加额外的功能，例如记录日志，运行性能，缓存等以记录函数运行时间为例，实现一个装饰器
 ```python
-函数装饰器可以在不修改原函数的条件下，为原函数添加额外的功能，例如记录日志，运行性能，缓存等
-以记录函数运行时间为例，实现一个装饰器
 import time
+
 def time_it(func):
-    def wrapper(func):
+    def wrapper():
         start_time = time.time()
         res = func()
         end_time = time.time()
-        return start_time - end_time
+        print(f"Function {func.__name__} took {end_time - start_time} seconds to run.")
+        return res
     return wrapper
+
+@time_it
+def hello():
+    print("hello world")
+
+hello()
     
 ```
 
@@ -1187,7 +1193,11 @@ PyObject是每个对象必有的内容，其中ob_refcnt就是做为引用计数
 ```
 
 #### 65.魔法函数 __call__怎么使用？
-
+应用场景
+函数工厂/策略模式：如上面的 PowerCalculator 示例，创建可配置的行为。
+装饰器类：类可以像装饰器函数一样使用，通过 __call__ 来包装被装饰的函数。
+模拟函数：创建具有状态的对象，这些对象在调用时可以访问和修改其内部状态。
+回调对象：在需要回调的地方，可以传递一个实现了 __call__ 的对象，而不是一个简单的函数，这样回调对象可以拥有自己的状态和方法。
 ```python
 class Bar:
     def __call__(self, *args, **kwargs):
@@ -1198,6 +1208,24 @@ b()  # 实例对象b 可以作为函数调用 等同于b.__call__ 使用
 
 
 # OUT: i am instance method
+
+class PowerCalculator:
+    def __init__(self, exponent):
+        self.exponent = exponent
+        print(f"PowerCalculator initialized with exponent {self.exponent}.")
+
+    def __call__(self, base):
+        print(f"Calculating {base} raised to the power of {self.exponent}.")
+        return base ** self.exponent
+
+# 创建一个计算平方的实例
+square = PowerCalculator(2)
+# 创建一个计算立方的实例
+cube = PowerCalculator(3)
+
+# 使用这些实例，就像使用函数一样
+print(square(5))  # 输出: 25
+print(cube(2))    # 输出: 8
 
 
 
@@ -1224,10 +1252,19 @@ def hello():
 #### 66.如何判断一个对象是函数还是方法？
 
 ```Python
-判断对象是函数或方法应该使用type(obj)
+使用 type() 函数来检查对象的类型。函数通常是 function 类型，而方法通常是 method 或 classmethod、staticmethod 类型。
 ```
 
 #### 67.简述 @classmethod 和 @staticmethod 用法和区别。
+
+| 特性         | @classmethod                     | @staticmethod                     |
+| :----------- | :------------------------------- | :-------------------------------- |
+| 第一个参数   | 必须是类 (cls)                   | 没有自动参数 (self 或 cls)        |
+| 访问类属性   | 可以 (cls.some_attr)              | 不行（除非通过类名 ClassName.some_attr） |
+| 访问实例属性 | 不行（除非通过 cls 创建实例后访问） | 不行（除非通过参数传入）          |
+| 调用方式     | ClassName.method() 或 instance.method() | ClassName.method() 或 instance.method() |
+| 本质         | 特殊方法，与类紧密相关           | 普通函数，只是放在类里           |
+| 主要用途     | 工厂方法、类级操作               | 工具函数、逻辑上相关但不依赖状态的操作 |
 
 ```python
 一般来说，要使用某个类的方法，需要先实例化一个对象再调用方法。
@@ -1267,33 +1304,42 @@ A.class_foo()
 ```
 
 #### 68.Python 中的接口如何实现？
+在 Python 中，没有像 Java 或 C# 那样的显式“接口”关键字，但可以通过几种方式来实现接口的概念，主要是通过抽象基类（Abstract Base Classes, ABCs）和协议（Protocols）。
+`抽象基类（ABCs）`：通过 abc 模块定义抽象基类，强制子类实现特定方法。
+`协议（Protocols）`：通过 typing.Protocol 定义接口，更灵活，基于类型注解。
+`模拟接口`：通过文档和约定来模拟接口，依赖文档和测试来确保实现。
 
 ```python
 #抽象类加抽象方法就等于面向对象编程中的接口
-from abc import ABCMeta,abstractmethod
+from abc import ABC, abstractmethod
 
-class interface(object):
-    __metaclass__ = ABCMeta #指定这是一个抽象类
-    @abstractmethod  #抽象方法
-    def Lee(self):
+class MyInterface(ABC):
+    @abstractmethod
+    def method1(self):
         pass
 
-    def Marlon(self):
+    @abstractmethod
+    def method2(self):
         pass
 
+class MyClass(MyInterface):
+    def method1(self):
+        print("Method 1 implemented")
 
-class RelalizeInterfaceLee(interface):#必须实现interface中的所有函数，否则会编译错误
-    def __init__(self):    
-        print '这是接口interface的实现'
-    def Lee(self):
-        print '实现Lee功能'        
-    def Marlon(self):
-        pass   
+    def method2(self):
+        print("Method 2 implemented")
+
+# 创建实例
+obj = MyClass()
+obj.method1()
+obj.method2()
+
 ```
 
 #### 69.你了解 Python 中的反射吗？
-
-```python
+在Python中，反射指的是程序在运行时检查、访问和修改自身结构或对象结构的能力。
+它允许你动态地获取对象的信息（如类型、属性、方法等）并执行操作，而无需在编写代码时完全知道这些信息。
+Python天生就具有很强的动态性和反射能力，这得益于其一切皆对象的设计哲学。
 通过字符串映射object对象的方法或者属性
 hasattr(obj,name_str): 判断objec是否有name_str这个方法或者属性
 getattr(obj,name_str): 获取object对象中与name_str同名的方法或者函数
@@ -1301,11 +1347,10 @@ setattr(obj,name_str,value): 为object对象设置一个以name_str为名的valu
 delattr(obj,name_str): 删除object对象中的name_str方法或者属性
 
 举个栗子
+```python
+
 import requests
-
 class Http(object):
-
-
     def get(self,url):
         res = requests.get(url)
         response = res.text
@@ -1331,8 +1376,11 @@ else:
 
 #### 70.简述 metaclass 的作用和其应用场景。
 
-```
-metaclass我没怎么用过，不能乱说误人子弟，可以看下这篇博文https://www.cnblogs.com/xybaby/p/7927407.html
+```markdown
+在Python中，元类是创建类的“工厂”。如果你把类看作是创建实例对象的模板，那么元类就是创建这些类（模板）的模板。
+默认情况下，Python使用内置的 type 函数作为元类来创建所有的类。当你定义一个类时，Python会幕后调用 type.__new__ 和 type.__init__ 来生成这个类对象。
+元类允许你在类创建时拦截、修改或观察类的定义过程。你可以通过自定义元类来控制类的创建行为，从而在类被定义时就对其结构或行为进行定制。
+简单来说，元类的核心作用是：在类被创建时自动修改或增强类。
 ```
 
 #### 71.对比 hasattr()，getattr() 和 setattr() 的用法。
@@ -1368,8 +1416,23 @@ type(obj)
 
 #### 74.Python 中的 元类(metaclass) 使用举例。
 
-```
-参考77.
+```markdown
+元类的应用场景
+由于元类提供了强大的类创建时干预能力，它通常用于一些比较高级或需要全局性影响的场景：
+
+自动注册类：
+当你定义一个类时，元类可以自动将这个类注册到一个全局的字典或列表中。这在实现插件系统、抽象基类（abc 模块内部就使用了元类）时非常有用。
+例如，所有继承自某个基类的子类在定义时自动被收集起来。
+实现接口检查（抽象基类 Abstract Base Classes, ABCs）：
+Python的 abc.ABCMeta 就是一个元类。它可以在类创建时检查子类是否实现了所有必需的抽象方法。如果没有，它会阻止该类的实例化，确保接口契约被遵守。
+创建描述符（Descriptors）和属性管理：
+虽然可以直接在类中使用 __setattr__、__getattribute__ 等，但元类可以在类创建时统一处理所有属性的设置和获取逻辑，例如实现ORM（对象关系映射）框架中常见的字段验证、类型转换等。
+代码生成或修改：
+在类创建时，元类可以动态地添加新的方法或属性到类中，或者修改已有的方法（例如，统一添加日志记录、性能计时等功能，类似装饰器，但作用于整个类）。
+实现单例模式（Singleton）：
+可以通过元类控制类的 __call__ 方法，使得每次尝试创建实例时都返回同一个实例对象。
+框架开发：
+许多大型框架（如Django ORM、Flask的部分扩展）会使用元类来动态地处理用户定义的模型类或配置类，自动生成数据库表、路由处理逻辑等。
 ```
 
 #### 75.简述 any() 和 all() 方法。
@@ -1438,15 +1501,48 @@ list(filter(lambda x: x%2==1,a))
 #### 78.在 Python 中是如何管理内存的？
 
 ```
-参考71.
+主要可以归纳为以下几个核心机制：
+`引用计数 (Reference Counting)`
+原理：这是Python内存管理的基础机制。每个Python对象（如整数、列表、字典等）都有一个与之关联的引用计数器。这个计数器记录了当前有多少个变量名或其他对象指向这个对象。
+工作方式：
+当一个对象被创建并赋值给一个变量时，它的引用计数初始化为1。
+当这个对象被赋值给另一个变量，或者作为参数传递给函数时，引用计数加1。
+当一个变量超出作用域、被重新赋值或显式删除（del）时，引用计数减1。
+内存回收：当一个对象的引用计数变为0时，意味着没有任何引用指向它了，这个对象就变成了“垃圾”。Python的内存管理器会立即回收该对象所占用的内存。
+优点：回收机制简单直接，回收操作几乎是即时的，能快速释放不再使用的内存。
+缺点：无法处理循环引用（后面会讲到）。每次增加或减少引用计数都有一定的开销。
+
+
+`垃圾回收器 (Garbage Collector, GC)`
+目的：为了解决引用计数无法处理的循环引用问题。循环引用指的是两个或多个对象相互引用，形成一个或多个循环，导致它们的引用计数永远不会降到0，即使它们实际上已经不再被程序的其他部分使用。
+工作方式：
+Python的垃圾回收器主要基于分代回收 (Generational Collection) 策略。
+分代思想：对象被创建后，年轻的对象更容易较早地变成垃圾（因为它们的生命周期短），而存活时间较长的对象则可能继续存活。GC将对象分为三代（第0代、第1代、第2代）。
+新创建的对象放入第0代。
+在一次第0代回收中存活下来的对象，会被移到第1代。
+在一次第1代回收中存活下来的对象，会被移到第2代。
+第2代是“老年”对象，回收频率最低。
+触发回收：当某一代的对象数量达到一定阈值时，就会触发该代的垃圾回收。通常，第1代和第2代的回收频率远低于第0代。
+具体算法：在回收时，GC会识别出那些无法从根对象（如全局变量、栈帧等）到达的循环引用对象组，并将它们标记为垃圾进行回收。
+如何触发：可以通过 gc 模块手动触发垃圾回收（如 gc.collect()），也可以查看当前的对象引用关系等。
+
+
+`内存池 (Memory Pools / Pymalloc)`
+目的：为了提高内存分配和释放的速度，减少频繁调用操作系统底层内存管理函数（如 malloc 和 free）带来的开销，并减少内存碎片。
+工作方式：Python实现了一套自己的内存分配器，称为 pymalloc。它为不同大小的对象维护了多个内存池。
+对于小的Python对象（如整数、短字符串等），pymalloc 会从其管理的内存池中分配和回收内存。这些内存通常在进程的生命周期内被重复使用，而不是每次都归还给操作系统。
+对于较大的对象，可能会直接调用操作系统的内存管理函数。
+优点：显著提高了小对象内存分配和释放的效率，尤其是在对象生命周期短、创建销毁频繁的情况下（如列表推导式、循环中创建临时对象）。
+整数和短字符串的interning
+Python为了节省内存和加速比较，会对一些常用的、不可变的小整数（通常是 -5 到 256）和短字符串进行“interning”（内部缓存）。这意味着相同的值只会在内存中存储一份，所有引用该值的变量都指向同一个内存地址。这减少了内存使用，并且 is 操作符（检查是否为同一个对象）对于这些值会更快。
 ```
 
 #### 79.当退出 Python 时是否释放所有内存分配？
 
 ```
-答案是否定的。那些具有对象循环引用或者全局命名空间引用的变量，在 Python 退出是往往不会被释放
-
-另外不会释放 C 库保留的部分内容。
+Python 的内部内存管理机制（引用计数、垃圾回收、内存池）在程序退出时会尽力释放它所直接管理的对象内存。
+但是，操作系统级别的缓存（如文件缓存）不会因为 Python 退出而立即消失。
+第三方 C 库或扩展可能存在内存泄漏，这部分内存不会在 Python 退出时被释放。
 ```
 
 
@@ -1583,7 +1679,9 @@ sys.setrecursionlimit(10000)  # set the maximum depth as 10000
 #### 94.什么是面向对象的 MRO？
 
 ```
-对于支持继承的编程语言来说，其方法（属性）可能定义在当前类，也可能来自于基类，所以在方法调用时就需要对当前类和基类进行搜索以确定方法所在的位置。而搜索的顺序就是所谓的「方法解析顺序」（Method Resolution Order，或MRO）。对于只支持单继承的语言来说，MRO 一般比较简单；而对于 Python 这种支持多继承的语言来说，MRO 就复杂很多。
+对于支持继承的编程语言来说，其方法（属性）可能定义在当前类，也可能来自于基类，所以在方法调用时就需要对当前类和基类进行搜索以确定方法所在的位置。
+而搜索的顺序就是所谓的「方法解析顺序」（Method Resolution Order，或MRO）。对于只支持单继承的语言来说，MRO 一般比较简单；
+而对于 Python 这种支持多继承的语言来说，MRO 就复杂很多。
 ```
 
 #### 95.简述 isinstance 的作用以及应用场景。
@@ -1603,7 +1701,7 @@ Python 的断言语句是一种调试工具，用来测试某个断言条件。�
 ```
 
 #### 97.lambda 表达式格式以及应用场景。
-
+lambda 参数1, 参数2, ... : 表达式
 ```python
 d = {'a':2,'b':1,'c':3,'d':'4'}
 sorted(d,key=lambda x :x[1]) 
@@ -1613,13 +1711,17 @@ sorted(d,key=lambda x :x[1])
 #### 98.新式类和旧式类的区别有哪些？
 
 ```
-Python 有两种类：经典类（classic class）和新式类（new-style class）。两者的不同之处在于新式类继承自 object。在 Python 2.1 以前，经典类是唯一可用的形式；Python 2.2 引入了新式类，使得类和内置类型更加统一；在 Python 3 中，新式类是唯一支持的类。
+Python 有两种类：经典类（classic class）和新式类（new-style class）。两者的不同之处在于新式类继承自 object。
+在 Python 2.1 以前，经典类是唯一可用的形式；
+在Python 2.2 引入了新式类，使得类和内置类型更加统一；
+在 Python 3 中，新式类是唯一支持的类。
 ```
 
 #### 99.dir() 是用来干什么的？
 
 ```
-dir() 函数不带参数时，返回当前范围内的变量、方法和定义的类型列表；带参数时，返回参数的属性、方法列表。如果参数包含方法__dir__()，该方法将被调用。如果参数不包含__dir__()，该方法将最大限度地收集参数信息。
+dir() 函数不带参数时，返回当前范围内的变量、方法和定义的类型列表；
+带参数时，返回参数的属性、方法列表。如果参数包含方法__dir__()，该方法将被调用。如果参数不包含__dir__()，该方法将最大限度地收集参数信息。
 ```
 
 #### 100.一个包里有三个模块，demo1.py、demo2.py 和 demo3.py，但使用 from tools import * 导入模块时，如何保证只有 demo1、demo3 被导入？
@@ -1640,34 +1742,58 @@ dir() 函数不带参数时，返回当前范围内的变量、方法和定义�
 ```
 
 #### 102.copy 和 deepcopy 的区别是什么？
-
-```python
 copy 即所谓的浅拷贝，赋值的时候非递归地复制子对象的引用；
 deepcopy 即所谓的深拷贝，赋值的时候递归复制子对象。
 举个栗子，
-xs = [1,2,[2,3,4],3]
-ys = xs # 浅拷贝
-zs = deepcopy(xs) # 深拷贝
-xs[2][0] = 5
-print(ys)
-[1,2,[2,3,4],3]
-print(xs)
-[1,2,[5,3,4],3]
+```python
 
-print(zs)
-[1,2,[5,3,4],3] # 由于深拷贝已经递归复制了子对象，所以内部的List也发生改变
+from copy import deepcopy
+xs = [1, 2, [2, 3, 4], 3]
+print("xs:", xs)
+ys = xs  # 浅拷贝
+print("ys:", ys)
+zs = deepcopy(xs)  # 深拷贝
+print("zs:", zs)
+xs[2][0] = 5
+print("xs:", xs)
+print("ys:", ys)
+print("zs:", zs)
+
+输出：
+xs: [1, 2, [2, 3, 4], 3]
+ys: [1, 2, [2, 3, 4], 3]
+zs: [1, 2, [2, 3, 4], 3]
+
+xs: [1, 2, [5, 3, 4], 3]
+ys: [1, 2, [5, 3, 4], 3]
+zs: [1, 2, [2, 3, 4], 3]
+
 
 ```
 
 #### 103.请阐述代码中经常遇到的 *args, **kwargs 的含义及用法。
 
 ```
-这两个是python中的可变参数。*args表示任何多个位置参数，它是一个tuple；**kwargs表示关键字参数，它是一个dict。并且同时使用*args和**kwargs时，必须*args参数列要在**kwargs前
+这两个是python中的可变参数
+*args 允许你将任意数量的位置参数传递给函数。这些参数在函数内部被收集到一个元组中。
+**kwargs 允许你将任意数量的关键字参数传递给函数。这些参数在函数内部被收集到一个字典中。
+```
+```python
+def print_all(*args, **kwargs):
+    print("Positional arguments:")
+    for arg in args:
+        print(arg)
+    
+    print("\nKeyword arguments:")
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_all(1, 2, 3, name="Alice", age=25, city="New York")
 ```
 
 #### 104.Python 中会有函数或成员变量包含单下划线前缀和结尾，或双下划线前缀结尾，它们的区别是什么？
 
-```python
+```markdown
 前置单下划线_var:命名约定，用来表示该名称仅在内部使用。一般对 Python 解释器没 有特殊含义(通配符导入除外)，只能作为对程序员的提示。
 后置单下划线 var_:命名约定，用于避免与 Python 关键字发生命名冲突。
 前置双下划线__var:在类环境中使用时会触发名称改写，对 Python 解释器有特殊含义。
@@ -1700,7 +1826,8 @@ lis[-2] # 取出列表的倒数第二个元素
 #### 108.pprint 模块是干什么的？
 
 ```
-print()和pprint()都是python的打印模块，功能基本一样，唯一的区别就是pprint()模块打印出来的数据结构更加完整，每行为一个数据结构，更加方便阅读打印输出结果。特别是对于特别长的数据打印，print()输出结果都在一行，不方便查看，而pprint()采用分行打印输出，所以对于数据结构比较复杂、数据长度较长的数据，适合采用pprint()打印方式
+print()和pprint()都是python的打印模块，功能基本一样，唯一的区别就是pprint()模块打印出来的数据结构更加完整，每行为一个数据结构，更加方便阅读打印输出结果。
+特别是对于特别长的数据打印，print()输出结果都在一行，不方便查看，而pprint()采用分行打印输出，所以对于数据结构比较复杂、数据长度较长的数据，适合采用pprint()打印方式
 ```
 
 #### 109.解释一下 Python 中的赋值运算符。
